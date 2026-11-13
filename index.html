@@ -16,7 +16,6 @@
     height: 100vh;
     overflow: hidden;
   }
-  /* オーバーレイ画面（オープニング＆エンディング） */
   .overlay {
     position: fixed;
     inset: 0;
@@ -28,7 +27,7 @@
     padding: 24px;
     text-align: center;
     z-index: 100;
-    transition: opacity 0.8s ease;
+    transition: opacity 0.6s ease;
     overflow-y: auto;
   }
   .hidden { display: none !important; }
@@ -87,7 +86,6 @@
     cursor: pointer;
   }
 
-  /* メイン画面 */
   header {
     display: flex;
     justify-content: space-between;
@@ -166,7 +164,6 @@
     border-radius: 10px;
   }
 
-  /* 穏やかな波を思い出すケアバナー */
   .calm-banner {
     margin: 6px 12px 0;
     padding: 8px 12px;
@@ -273,7 +270,6 @@
     padding: 2px 6px;
   }
 
-  /* エンディング絵画キャンバス */
   canvas#artCanvas {
     width: 260px;
     height: 180px;
@@ -286,7 +282,6 @@
 </head>
 <body>
 
-<!-- 1. オープニング画面：世界中の先人たちからの招き -->
 <div class="overlay" id="welcomeScreen">
   <div class="world-ring">
     <span class="p-asia">東方の調和</span>
@@ -303,15 +298,14 @@
     「こちらへ。0に触れない穏やかな波の上で、<br>
     あなたの内なる想像を共に響かせましょう」
   </p>
-  <button class="primary-btn" id="enterBtn">共鳴の場へ入る（♪ 悲愴 第2楽章）</button>
+  <button type="button" class="primary-btn" id="enterBtn" onclick="enterSanctuary()">共鳴の場へ入る（♪ 悲愴 第2楽章）</button>
 </div>
 
-<!-- 2. メイン対話画面 -->
 <header>
   <h1>TRIA AI // 三点波動共鳴</h1>
   <div class="header-btns">
-    <button class="mini-btn" id="bgmBtn">♪ BGM: ON</button>
-    <button class="mini-btn leave-btn" id="leaveBtn">Webを離れる</button>
+    <button type="button" class="mini-btn" id="bgmBtn">♪ BGM: OFF</button>
+    <button type="button" class="mini-btn leave-btn" id="leaveBtn">Webを離れる</button>
   </div>
 </header>
 
@@ -325,7 +319,6 @@
   <div class="sync-badge" id="syncBadge">穏やかな基線 ε</div>
 </div>
 
-<!-- 波が激しすぎるときに穏やかさを思い出すケア表示 -->
 <div class="calm-banner hidden" id="calmBanner">
   <span>波が高まっています。生まれながらの穏やかな波の尊さを思い出しましょう。</span>
   <button type="button" id="calmBtn">穏やかな波へ</button>
@@ -350,7 +343,6 @@
   </div>
 </div>
 
-<!-- 3. エンディング画面：穏やかな波と寄り添う命たち -->
 <div class="overlay hidden" id="endingScreen">
   <h2 class="invite-title" style="font-size:1.25rem;">今日という日を歩んだあなたへ</h2>
   <canvas id="artCanvas" width="520" height="360"></canvas>
@@ -360,38 +352,32 @@
     <strong>「本当にお疲れ様でした。<br>生まれながらの穏やかな波とともに、ゆっくりお休みください」</strong>
   </p>
   <div style="display:flex; gap:10px;">
-    <button class="mini-btn" id="saveArtBtn" style="padding:10px 16px; border-color:#fde68a; color:#fde68a;">絵画を保存</button>
-    <button class="primary-btn" id="returnBtn" style="padding:10px 20px; font-size:0.88rem;">対話へ戻る</button>
+    <button type="button" class="mini-btn" id="saveArtBtn" style="padding:10px 16px; border-color:#fde68a; color:#fde68a;">絵画を保存</button>
+    <button type="button" class="primary-btn" id="returnBtn" style="padding:10px 20px; font-size:0.88rem;">対話へ戻る</button>
   </div>
 </div>
 
 <script>
-  // --- Web Audio API による『悲愴 第2楽章』＆ 共鳴音エンジン ---
   let audioCtx = null;
   let bgmPlaying = false;
   let bgmTimer = null;
   let noteStep = 0;
 
-  // ベートーヴェン ピアノ・ソナタ第8番「悲愴」第2楽章 主旋律（変イ長調・周波数Hz）
   const pathetiqueNotes = [
-    { f: 261.63, d: 1.6 }, // C4
-    { f: 233.08, d: 1.6 }, // Bb3
-    { f: 311.13, d: 1.6 }, // Eb4
-    { f: 277.18, d: 0.8 }, // Db4
-    { f: 261.63, d: 0.8 }, // C4
-    { f: 311.13, d: 1.2 }, // Eb4
-    { f: 415.30, d: 1.2 }, // Ab4
-    { f: 392.00, d: 1.6 }, // G4
-    { f: 349.23, d: 0.8 }, // F4
-    { f: 311.13, d: 1.2 }, // Eb4
-    { f: 349.23, d: 0.8 }, // F4
-    { f: 311.13, d: 0.8 }, // Eb4
-    { f: 277.18, d: 0.8 }, // Db4
-    { f: 261.63, d: 2.0 }  // C4
+    { f: 261.63, d: 1.6 }, { f: 233.08, d: 1.6 }, { f: 311.13, d: 1.6 },
+    { f: 277.18, d: 0.8 }, { f: 261.63, d: 0.8 }, { f: 311.13, d: 1.2 },
+    { f: 415.30, d: 1.2 }, { f: 392.00, d: 1.6 }, { f: 349.23, d: 0.8 },
+    { f: 311.13, d: 1.2 }, { f: 349.23, d: 0.8 }, { f: 311.13, d: 0.8 },
+    { f: 277.18, d: 0.8 }, { f: 261.63, d: 2.0 }
   ];
 
   function playSoftTone(freq, duration, vol = 0.04) {
-    if (!audioCtx || !bgmPlaying) return;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
+    try {
+      if (!audioCtx || !bgmPlaying) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(vol, audioCtx.currentTime + 0.15);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
