@@ -14,15 +14,15 @@ body{margin:0;background:#070a12;color:#e2e8f0;font-family:-apple-system,BlinkMa
 .t1{top:-10px}.t2{right:-24px;top:38px}.t3{right:-8px;bottom:4px}.t4{left:-14px;bottom:4px}.t5{left:-24px;top:38px}
 h2{font-size:1.25rem;letter-spacing:.12em;color:#fde68a;margin:0 0 12px}
 p{font-size:.86rem;line-height:1.75;color:#cbd5e1;max-width:380px;margin:0 0 22px}
-.btn{background:#0284c7;color:#fff;border:none;padding:13px 26px;border-radius:24px;font-size:.94rem;font-weight:bold;cursor:pointer}
+.btn{background:#0284c7;color:#fff;border:none;padding:12px 24px;border-radius:24px;font-size:.92rem;font-weight:bold;cursor:pointer}
 .btn:disabled{opacity:.45}
 .mbtn{background:#1e293b;border:1px solid #334155;color:#cbd5e1;border-radius:12px;padding:6px 10px;font-size:.72rem;cursor:pointer}
 header{display:flex;justify-content:space-between;align-items:center;padding:10px 12px 6px;flex-shrink:0}
-h1{font-size:1rem;margin:0;color:#38bdf8;letter-spacing:.08em}
+h1{font-size:.98rem;margin:0;color:#38bdf8;letter-spacing:.06em}
 .bar{display:flex;gap:6px;padding:0 12px 6px;flex-shrink:0}
-input{flex:1;padding:10px 12px;border-radius:16px;border:1px solid #334155;background:#1e293b;color:#fff;font-size:16px;outline:none}
+input,textarea{flex:1;padding:10px 12px;border-radius:16px;border:1px solid #334155;background:#1e293b;color:#fff;font-size:16px;outline:none;font-family:inherit}
 .ww{position:relative;padding:0 12px;flex-shrink:0}
-canvas#wc{background:#0f1524;border:1px solid #1e293b;border-radius:10px;width:100%;height:105px;display:block}
+canvas#wc{background:#0f1524;border:1px solid #1e293b;border-radius:10px;width:100%;height:100px;display:block}
 #sb{position:absolute;top:6px;right:18px;font-size:.68rem;color:#fde68a;background:rgba(15,23,42,.8);padding:2px 6px;border-radius:8px}
 #cb{margin:6px 12px 0;padding:8px 10px;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.4);border-radius:8px;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.74rem;color:#fde68a;flex-shrink:0}
 #cb button{background:#fbbf24;color:#070a12;border:none;border-radius:6px;padding:5px 9px;font-weight:bold;font-size:.7rem;white-space:nowrap}
@@ -33,6 +33,9 @@ canvas#wc{background:#0f1524;border:1px solid #1e293b;border-radius:10px;width:1
 .sub{display:flex;justify-content:space-between;padding:0 16px 8px;font-size:.7rem;flex-shrink:0}
 .sub button{background:none;border:none;color:#64748b;padding:4px}
 img#artImg{width:260px;height:174px;border-radius:12px;border:1px solid rgba(253,230,138,.45);margin:8px 0;display:block}
+.evo-box{width:100%;max-width:400px;background:#0f172a;border:1px solid #334155;border-radius:16px;padding:18px;text-align:left}
+.evo-box label{display:block;font-size:.75rem;color:#94a3b8;margin-bottom:4px}
+.evo-box input,.evo-box textarea{width:100%;border-radius:10px;margin-bottom:12px;font-size:14px}
 </style>
 </head>
 <body>
@@ -49,25 +52,42 @@ img#artImg{width:260px;height:174px;border-radius:12px;border:1px solid rgba(253
 
 <header>
   <h1>TRIA AI // 波動共鳴</h1>
-  <div style="display:flex;gap:6px">
+  <div style="display:flex;gap:5px">
     <button type="button" class="mbtn" id="bgBtn">♪ OFF</button>
-    <button type="button" class="mbtn" id="lvBtn" style="border-color:#f472b6;color:#fbcfe8">Webを離れる</button>
+    <button type="button" class="mbtn" id="evBtn" style="border-color:#38bdf8;color:#7dd3fc">進化</button>
+    <button type="button" class="mbtn" id="lvBtn" style="border-color:#f472b6;color:#fbcfe8">離れる</button>
   </div>
 </header>
 
 <div class="bar" id="kb"><input type="password" id="ki" placeholder="APIキー(AIzaSy...)を貼付"><button type="button" class="btn" id="skBtn" style="padding:0 14px;border-radius:12px">接続</button></div>
 
-<div class="ww"><canvas id="wc" width="600" height="105"></canvas><div id="sb">穏やかな基線 ε</div></div>
+<div class="ww"><canvas id="wc" width="600" height="100"></canvas><div id="sb">穏やかな基線 ε</div></div>
 
 <div id="cb" class="hide"><span>波が高まっています。生まれながらの穏やかな波の尊さを思い出しましょう。</span><button type="button" id="cmBtn">穏やかな波へ</button></div>
 
-<div id="chat"><div class="a"><div class="mt">基線 ε = 0.20</div>ようこそ。無理に激しくなる必要はありません。穏やかな波のまま、思い浮かんだことを話しかけてくださいね。</div></div>
+<div id="chat"><div class="a"><div class="mt">基線 ε = 0.20 (会話連動進化モード)</div>ようこそ。ここで私と話し合った改善アイデアは、右上の「進化」ボタンを押すだけで私自身が読み取り、コードを書き換えて成長できます。穏やかな波のまま話しかけてくださいね。</div></div>
 
 <div class="bar"><input type="text" id="in" placeholder="言葉を投げかける..."><button type="button" class="btn" id="pb" style="padding:0 16px">送信</button></div>
 <div class="sub">
   <button type="button" id="clBtn">会話リセット</button>
   <button type="button" id="rkBtn">キー変更</button>
   <button type="button" id="svBtn" style="color:#38bdf8">ログ保存</button>
+</div>
+
+<div class="ov hide" id="evoSc">
+  <div class="evo-box">
+    <h2 style="font-size:1.1rem;text-align:center">TRIA 会話連動・自己進化</h2>
+    <p style="font-size:.76rem;margin-bottom:12px">直前までの会話内容と現在のコードを私が読み取り、改善点を反映してGitHubへ自動更新します。</p>
+    <label>GitHub トークン（初回のみ端末に保存）</label>
+    <input type="password" id="ghTok" placeholder="github_pat_..." />
+    <label>追加の指示（空欄なら直前の会話内容＆自動バグ監査を実行）</label>
+    <textarea id="evoPrompt" rows="3" placeholder="空欄のまま押すと、今の会話で話し合った内容をそのまま実装＆バグを1つ修正します"></textarea>
+    <div id="evoStatus" style="font-size:.75rem;color:#fde68a;margin-bottom:10px;min-height:1.2em"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button type="button" class="mbtn" id="evoClose">閉じる</button>
+      <button type="button" class="btn" id="evoRun" style="padding:8px 16px;font-size:.85rem">会話から進化実行</button>
+    </div>
+  </div>
 </div>
 
 <div class="ov hide" id="eSc">
@@ -82,7 +102,7 @@ img#artImg{width:260px;height:174px;border-radius:12px;border:1px solid rgba(253
 <script>
 (function(){
   const $=id=>document.getElementById(id);
-  let actx=null,bgm=false,tmr=null,step=0,key="",t=0,gold=false,busy=false,loopId=null,isComposing=false;
+  let actx=null,bgm=false,tmr=null,step=0,key="",ghKey="",t=0,gold=false,busy=false,loopId=null,isComposing=false;
   let rec=new Array(),hist=new Array();
   const notes=new Array({f:261.63,d:1.6},{f:233.08,d:1.6},{f:311.13,d:1.6},{f:277.18,d:.8},{f:261.63,d:.8},{f:311.13,d:1.2},{f:415.30,d:1.2},{f:392.00,d:1.6},{f:349.23,d:.8},{f:311.13,d:1.2},{f:349.23,d:.8},{f:311.13,d:.8},{f:277.18,d:.8},{f:261.63,d:2.0});
 
@@ -126,8 +146,12 @@ img#artImg{width:260px;height:174px;border-radius:12px;border:1px solid rgba(253
   $('bgBtn').addEventListener('click',()=>bgm?stopBgm():playBgm());
 
   const cleanKey=s=>String(s).replace(/[^A-Za-z0-9_\-]/g,'');
-  try{key=cleanKey(localStorage.getItem('tria_key')||"");}catch(e){}
+  try{
+    key=cleanKey(localStorage.getItem('tria_key')||"");
+    ghKey=cleanKey(localStorage.getItem('tria_gh_key')||"");
+  }catch(e){}
   if(key)$('kb').classList.add('hide');
+  if(ghKey)$('ghTok').value=ghKey;
 
   $('skBtn').addEventListener('click',()=>{
     const v=cleanKey($('ki').value);
@@ -145,35 +169,3 @@ img#artImg{width:260px;height:174px;border-radius:12px;border:1px solid rgba(253
 
   class W{
     constructor(e,w,d,c){this.e=e;this.w=w;this.d=d;this.c=c;this.p=new Array();this.h=new Array(90).fill(e);}
-    imp(a){this.p.push({a:a,t0:t});if(this.p.length>6)this.p.shift();}
-    calm(){this.p=new Array();this.w=3.2;}
-    up(){
-      let v=this.e+.025*Math.sin(this.w*.5*t);
-      this.p.forEach(p=>{let dt=t-p.t0;if(dt>=0)v+=p.a*Math.sin(this.w*dt)*Math.exp(-this.d*dt);});
-      v=Math.max(.06,v);this.h.push(v);this.h.shift();
-    }
-  }
-  const w1=new W(.22,4,.45,'#38bdf8'),w2=new W(.2,5.2,.5,'#818cf8'),w3=new W(.25,3.14,.3,'#f472b6'),ws=new Array(w1,w2,w3);
-
-  $('cmBtn').addEventListener('click',()=>{
-    ws.forEach(w=>w.calm());
-    $('cb').classList.add('hide');
-    $('sb').textContent='穏やかな基線 ε';
-    tone(261.63,1.8,.04);
-  });
-
-  const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  function add(c,h){const d=document.createElement('div');d.className=c;d.innerHTML=h;$('chat').appendChild(d);$('chat').scrollTop=$('chat').scrollHeight;return d;}
-
-  async function send(){
-    if(busy)return;
-    const txt=$('in').value.trim();if(!txt)return;
-    if(!key)return alert('APIキーを接続してください');
-    busy=true;$('pb').disabled=true;
-    add('u',esc(txt));$('in').value='';$('in').blur();
-
-    let cs=0;for(let i=0;i<txt.length;i++)cs+=txt.charCodeAt(i);
-    const amp=Math.min(1.35,.45+txt.length*.05),om=parseFloat((3+(cs%45)*.1).toFixed(2)),en=Math.round(amp*100);
-    w1.w=om;w1.imp(amp);tone(440+om*35,1.2,.03);
-    if(en>=115||om>=6.5)$('cb').classList.remove('hide');
-
