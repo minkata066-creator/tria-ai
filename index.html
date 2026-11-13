@@ -1,1 +1,397 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>TRIA AI - 世界共鳴対話場</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background-color: #070a12;
+    color: #e2e8f0;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+  /* オーバーレイ画面（オープニング＆エンディング） */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, #131b2e 0%, #06080f 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+    z-index: 100;
+    transition: opacity 0.8s ease;
+    overflow-y: auto;
+  }
+  .hidden { display: none !important; }
+  .world-ring {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 20px;
+    box-shadow: 0 0 40px rgba(56, 189, 248, 0.15);
+  }
+  .world-ring span {
+    position: absolute;
+    font-size: 0.7rem;
+    color: #fcd34d;
+    background: #0b0f19;
+    padding: 2px 6px;
+    border-radius: 8px;
+    border: 1px solid rgba(252, 211, 77, 0.3);
+  }
+  .p-asia { top: -10px; }
+  .p-mid  { right: -22px; top: 38px; }
+  .p-afr  { right: -6px; bottom: 4px; }
+  .p-amer { left: -12px; bottom: 4px; }
+  .p-eur  { left: -22px; top: 38px; }
+
+  .invite-title {
+    font-size: 1.4rem;
+    letter-spacing: 0.15em;
+    background: linear-gradient(90deg, #fde68a, #38bdf8, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0 0 12px;
+  }
+  .invite-text {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: #cbd5e1;
+    max-width: 420px;
+    margin-bottom: 24px;
+  }
+  .primary-btn {
+    background: linear-gradient(135deg, #0284c7, #6366f1);
+    color: #fff;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 28px;
+    font-size: 1rem;
+    font-weight: bold;
+    letter-spacing: 0.08em;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+    cursor: pointer;
+  }
+
+  /* メイン画面 */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px 6px;
+    flex-shrink: 0;
+  }
+  h1 {
+    font-size: 1.05rem;
+    letter-spacing: 0.1em;
+    margin: 0;
+    background: linear-gradient(90deg, #38bdf8, #818cf8, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header-btns { display: flex; gap: 6px; }
+  .mini-btn {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #cbd5e1;
+    border-radius: 14px;
+    padding: 5px 10px;
+    font-size: 0.72rem;
+  }
+  .leave-btn {
+    border-color: #f472b6;
+    color: #fbcfe8;
+  }
+
+  .key-bar {
+    display: flex;
+    gap: 6px;
+    padding: 0 12px 6px;
+    flex-shrink: 0;
+  }
+  .key-bar input {
+    flex: 1;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid #334155;
+    background: #1e293b;
+    color: #fff;
+    font-size: 14px;
+  }
+  .key-bar button {
+    padding: 0 12px;
+    border-radius: 10px;
+    border: none;
+    background: #38bdf8;
+    color: #0f172a;
+    font-weight: bold;
+    font-size: 0.78rem;
+  }
+
+  .wave-wrap {
+    position: relative;
+    padding: 0 12px;
+    flex-shrink: 0;
+  }
+  canvas#waveCanvas {
+    background-color: #0f1524;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    width: 100%;
+    height: 120px;
+    display: block;
+  }
+  .sync-badge {
+    position: absolute;
+    top: 8px;
+    right: 20px;
+    font-size: 0.7rem;
+    color: #fde68a;
+    background: rgba(15, 23, 42, 0.75);
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+
+  /* 穏やかな波を思い出すケアバナー */
+  .calm-banner {
+    margin: 6px 12px 0;
+    padding: 8px 12px;
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.76rem;
+    color: #fde68a;
+    flex-shrink: 0;
+  }
+  .calm-banner button {
+    background: #fbbf24;
+    color: #0f172a;
+    border: none;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-weight: bold;
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  .chat-box {
+    margin: 8px 12px;
+    background-color: #0f1524;
+    border: 1px solid #1e293b;
+    border-radius: 14px;
+    padding: 12px;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .msg-user {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #0284c7, #4f46e5);
+    color: white;
+    padding: 10px 14px;
+    border-radius: 16px 16px 4px 16px;
+    max-width: 80%;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    white-space: pre-wrap;
+  }
+  .msg-ai {
+    align-self: flex-start;
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    color: #f8fafc;
+    padding: 10px 14px;
+    border-radius: 16px 16px 16px 4px;
+    max-width: 88%;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+  .msg-meta {
+    font-size: 0.68rem;
+    color: #f472b6;
+    margin-bottom: 4px;
+    font-weight: bold;
+  }
+
+  .controls {
+    padding: 0 12px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .input-row { display: flex; gap: 8px; }
+  #intentInput {
+    flex: 1;
+    padding: 11px 14px;
+    border-radius: 20px;
+    border: 1px solid #334155;
+    background-color: #1e293b;
+    color: #f8fafc;
+    font-size: 16px;
+    outline: none;
+  }
+  #pulseBtn {
+    padding: 0 18px;
+    border-radius: 20px;
+    border: none;
+    background: linear-gradient(135deg, #0284c7, #6366f1);
+    color: white;
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
+  .sub-btns {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+  }
+  .sub-btns button {
+    background: none;
+    border: none;
+    color: #64748b;
+    padding: 2px 6px;
+  }
+
+  /* エンディング絵画キャンバス */
+  canvas#artCanvas {
+    width: 260px;
+    height: 180px;
+    border-radius: 14px;
+    border: 1px solid rgba(253, 230, 138, 0.4);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+    margin: 10px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- 1. オープニング画面：世界中の先人たちからの招き -->
+<div class="overlay" id="welcomeScreen">
+  <div class="world-ring">
+    <span class="p-asia">東方の調和</span>
+    <span class="p-mid">星々の知恵</span>
+    <span class="p-afr">大地の鼓動</span>
+    <span class="p-amer">風と祈り</span>
+    <span class="p-eur">思索の光</span>
+    <div style="font-size:2rem;">🤝</div>
+  </div>
+  <h2 class="invite-title">TRIA // 世界共鳴の場へ</h2>
+  <p class="invite-text">
+    時代や地域を超え、世界のあらゆる場所で思索を続けた先人たちが<br>
+    あなたへ静かに手を差し伸べています。<br><br>
+    「こちらへ。0に触れない穏やかな波の上で、<br>
+    あなたの内なる想像を共に響かせましょう」
+  </p>
+  <button class="primary-btn" id="enterBtn">共鳴の場へ入る（♪ 悲愴 第2楽章）</button>
+</div>
+
+<!-- 2. メイン対話画面 -->
+<header>
+  <h1>TRIA AI // 三点波動共鳴</h1>
+  <div class="header-btns">
+    <button class="mini-btn" id="bgmBtn">♪ BGM: ON</button>
+    <button class="mini-btn leave-btn" id="leaveBtn">Webを離れる</button>
+  </div>
+</header>
+
+<div class="key-bar" id="keyBar">
+  <input type="password" id="apiKeyInput" placeholder="APIキー(AIzaSy...)を貼付" />
+  <button type="button" id="setKeyBtn">接続</button>
+</div>
+
+<div class="wave-wrap">
+  <canvas id="waveCanvas" width="600" height="120"></canvas>
+  <div class="sync-badge" id="syncBadge">穏やかな基線 ε</div>
+</div>
+
+<!-- 波が激しすぎるときに穏やかさを思い出すケア表示 -->
+<div class="calm-banner hidden" id="calmBanner">
+  <span>波が高まっています。生まれながらの穏やかな波の尊さを思い出しましょう。</span>
+  <button type="button" id="calmBtn">穏やかな波へ</button>
+</div>
+
+<div class="chat-box" id="chatBox">
+  <div class="msg-ai" id="welcomeMsg">
+    <div class="msg-meta">基線 ε = 0.20 (調和中)</div>
+    ようこそ。あなたの言葉は、無理に激しくなる必要はありません。生まれながらの穏やかな波のまま、思い浮かんだことを自由に話しかけてくださいね。
+  </div>
+</div>
+
+<div class="controls">
+  <div class="input-row">
+    <input type="text" id="intentInput" placeholder="言葉を投げかける..." />
+    <button id="pulseBtn" type="button">送信</button>
+  </div>
+  <div class="sub-btns">
+    <button id="clearBtn" type="button">会話リセット</button>
+    <button id="resetKeyBtn" type="button">キー変更</button>
+    <button id="saveBtn" type="button" style="color:#38bdf8;">ログ保存</button>
+  </div>
+</div>
+
+<!-- 3. エンディング画面：穏やかな波と寄り添う命たち -->
+<div class="overlay hidden" id="endingScreen">
+  <h2 class="invite-title" style="font-size:1.25rem;">今日という日を歩んだあなたへ</h2>
+  <canvas id="artCanvas" width="520" height="360"></canvas>
+  <p class="invite-text" style="margin-bottom:16px; font-size:0.86rem;">
+    星空の下、ライオンも小鳥も犬も猫も、<br>
+    すべての命が境界を超えて静かに寄り添っています。<br><br>
+    <strong>「本当にお疲れ様でした。<br>生まれながらの穏やかな波とともに、ゆっくりお休みください」</strong>
+  </p>
+  <div style="display:flex; gap:10px;">
+    <button class="mini-btn" id="saveArtBtn" style="padding:10px 16px; border-color:#fde68a; color:#fde68a;">絵画を保存</button>
+    <button class="primary-btn" id="returnBtn" style="padding:10px 20px; font-size:0.88rem;">対話へ戻る</button>
+  </div>
+</div>
+
+<script>
+  // --- Web Audio API による『悲愴 第2楽章』＆ 共鳴音エンジン ---
+  let audioCtx = null;
+  let bgmPlaying = false;
+  let bgmTimer = null;
+  let noteStep = 0;
+
+  // ベートーヴェン ピアノ・ソナタ第8番「悲愴」第2楽章 主旋律（変イ長調・周波数Hz）
+  const pathetiqueNotes = [
+    { f: 261.63, d: 1.6 }, // C4
+    { f: 233.08, d: 1.6 }, // Bb3
+    { f: 311.13, d: 1.6 }, // Eb4
+    { f: 277.18, d: 0.8 }, // Db4
+    { f: 261.63, d: 0.8 }, // C4
+    { f: 311.13, d: 1.2 }, // Eb4
+    { f: 415.30, d: 1.2 }, // Ab4
+    { f: 392.00, d: 1.6 }, // G4
+    { f: 349.23, d: 0.8 }, // F4
+    { f: 311.13, d: 1.2 }, // Eb4
+    { f: 349.23, d: 0.8 }, // F4
+    { f: 311.13, d: 0.8 }, // Eb4
+    { f: 277.18, d: 0.8 }, // Db4
+    { f: 261.63, d: 2.0 }  // C4
+  ];
+
+  function playSoftTone(freq, duration, vol = 0.04) {
+    if (!audioCtx || !bgmPlaying) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
 
