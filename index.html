@@ -1,18 +1,18 @@
-<!doctype html><meta charset=utf-8><meta name=viewport content=width=device-width,initial-scale=1><title>TRIA AI</title><style>*{box-sizing:border-box}body,.b,#ch{display:flex;gap:6px}body,#ch{flex-direction:column}body,input,#ch{padding:10px}body{margin:0;background:#0b0f19;color:#e2e8f0;font:16px sans-serif;height:100dvh}h1{font-size:1.1rem;text-align:center;margin:0;color:#38bdf8}input,button,canvas,#ch,.u,.a{border-radius:10px}input,.a{background:#1e293b}input{flex:1;border:1px solid #334155;font-size:16px}input,button,.u{color:#fff}button,.u{background:#0284c7}button{padding:0 14px;border:0;font-weight:700}button:disabled{opacity:.5}canvas,#ch{background:#111827}canvas{border:1px solid #1e293b;width:100%;height:110px;flex-shrink:0}#ch{flex:1;overflow-y:auto;font-size:.9rem}.u,.a{padding:8px 12px;white-space:pre-wrap;max-width:85%}.u{align-self:flex-end}.a{align-self:flex-start}.m{font-size:.7rem;color:#f472b6;margin-bottom:3px}</style><h1>TRIA AI // 波動共鳴</h1><div class=b id=kb><input type=password id=ki placeholder="APIキー(AIzaSy...)"><button id=sb>セット</button></div><canvas id=c width=600 height=110></canvas><div id=ch><div class=a><div class=m>基線 ε = 0.20</div>APIキーを入れてセット</div></div><div class=b><input id=ip placeholder=メッセージ...><button id=bt>送信</button></div><script>
+<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>TRIA AI</title><style>*{box-sizing:border-box}body,.b,#ch{display:flex;gap:6px}body,#ch{flex-direction:column}body,input,#ch{padding:10px}body{margin:0;background:#0b0f19;color:#e2e8f0;font:16px sans-serif;height:100dvh}h1{font-size:1.1rem;text-align:center;margin:0;color:#38bdf8}input,button,canvas,#ch,.u,.a{border-radius:10px}input,.a{background:#1e293b}input{flex:1;border:1px solid #334155;font-size:16px}input,button,.u{color:#fff}button,.u{background:#0284c7}button{padding:0 14px;border:0;font-weight:700}button:disabled{opacity:.5}canvas,#ch{background:#111827}canvas{border:1px solid #1e293b;width:100%;height:110px;flex-shrink:0}#ch{flex:1;overflow-y:auto;font-size:.9rem}.u,.a{padding:8px 12px;white-space:pre-wrap;max-width:85%}.u{align-self:flex-end}.a{align-self:flex-start}.m{font-size:.7rem;color:#f472b6;margin-bottom:3px}</style><h1>TRIA AI // 波動共鳴</h1><div class=b id=kb><input type=password id=ki placeholder="APIキー(AIzaSy...)"><button id=sb>セット</button></div><canvas id=c width=600 height=110></canvas><div id=ch><div class=a><div class=m>基線 ε = 0.20</div>APIキーを入れてセット</div></div><div class=b><input id=ip placeholder=メッセージ...><button id=bt>送信</button></div><script>
 let cx=c.getContext('2d'),k=localStorage.k||'',t=0,H=[],
 esc=s=>new Option(s).innerHTML,
 add=(c,h,d=document.createElement('div'))=>(d.className=c,d.innerHTML=h,ch.appendChild(d),ch.scrollTop=1e9,d),
 setK=v=>(k=v.trim())&&(localStorage.k=k,kb.style.display='none',add('a','<div class=m>準備完了</div>メッセージをどうぞ！')),
 W=[[.22,4.5,.4,'#38bdf8'],[.2,6.2,.5,'#818cf8'],[.25,3.14,.25,'#f472b6']].map(([e,w,d,c])=>[e,w,d,c,[],Array(140).fill(e)]),
 I=(i,a)=>W[i][4].push([a,t])>9&&W[i][4].shift(),
-M=['gemini-3.8-flash','gemini-3.7-flash','gemini-3.5-flash-lite'];
+M=['gemini-3.8-flash','gemini-3.6-flash','gemini-3.5-flash-lite'];
 k&&setK(k);sb.onclick=_=>setK(ki.value);
 
 async function ask(sys,S){
   let err;
   for(let m of M)for(let i=0;i<2;i++)try{
     let r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${encodeURIComponent(k)}`,{
-      method:'POST',headers:{'Content-Type':'application/json'},signal:AbortSignal.timeout(15e3),
+      method:'POST',headers:{'Content-Type':'application/json'},signal:AbortSignal.timeout(25e3),
       body:JSON.stringify({systemInstruction:{parts:[{text:sys}]},contents:H,generationConfig:{thinkingConfig:{thinkingLevel:'low'}}})
     }),d=await r.json().catch(_=>({})),msg=d.error?.message||'HTTP '+r.status;
     if(r.ok&&!d.error){
@@ -20,23 +20,26 @@ async function ask(sys,S){
       if(!rep)throw Error('応答が空');return{rep,m}
     }
     err=Error(msg);
+    if(r.status==400||r.status==403){delete localStorage.k;kb.style.display='flex';throw err}
     if(r.status==503||r.status==429||/high demand|overloaded/i.test(msg)){
       S(`再同調中 (${m})...`);await new Promise(r=>setTimeout(r,800*(i+1)));continue
     }
-    (r.status==400||r.status==403)&&(delete localStorage.k,kb.style.display='flex');throw err
+    S(`切替中 (${m})...`);break
   }catch(e){
-    if(e.name=='TimeoutError'){err=Error('タイムアウト');S(`切替中 (${m})...`);continue}
+    if(e.name=='TimeoutError'||e.name=='AbortError'||e instanceof TypeError){
+      err=Error(e instanceof TypeError?'通信エラー':'タイムアウト');S(`切替中 (${m})...`);continue
+    }
     throw e
   }
   throw err
 }
 
 async function send(){
-  let txt=ip.value.trim();if(!txt)return;if(!k)return alert('APIキーをセットしてください');
+  let txt=ip.value.trim();if(!txt||bt.disabled)return;if(!k)return alert('APIキーをセットしてください');
   add('u',esc(txt));ip.value='';ip.blur();bt.disabled=1;
   let cs=[...txt].reduce((a,c)=>a+c.charCodeAt(),0),amp=Math.min(1.4,.5+txt.length*.06),om=+(3+cs%50*.1).toFixed(2),en=Math.round(amp*100),
   ld=add('a',''),S=(x,t=`共鳴中... E:${en} / ω:${om}`)=>ld.innerHTML=`<div class=m>${t}</div>${x}`;
-  S('通信中...');W[0][1]=om;I(0,amp);H.push({role:'user',parts:[{text:txt}]})>20&&H.shift();
+  S('通信中...');W[0][1]=om;I(0,amp);H.push({role:'user',parts:[{text:txt}]})>20&&H.splice(0,2);
   try{
     let{rep,m}=await ask(`あなたはTRIA(三点波動共鳴システム)の知性ワトソンです。現在E:${en}、ω:${om}。${en>=110?'創造的でワクワクする視点で':om>=5.5?'論理的で鋭く整理して':'穏やかに寄り添って'}、親しみやすく答えてください。`,S);
     H.push({role:'model',parts:[{text:rep}]});W[1][1]=4+rep.length%40*.1;I(1,Math.min(1.3,.5+rep.length*.005));
