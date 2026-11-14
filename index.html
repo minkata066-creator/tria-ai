@@ -13,7 +13,7 @@ async function ask(sys,S){
   for(let m of M)for(let i=0;i<2;i++)try{
     let r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${encodeURIComponent(k)}`,{
       method:'POST',headers:{'Content-Type':'application/json'},signal:AbortSignal.timeout(25e3),
-      body:JSON.stringify({systemInstruction:{parts:[{text:sys}]},contents:H,generationConfig:{thinkingConfig:{thinkingLevel:'low'}}})
+      body:JSON.stringify({systemInstruction:{parts:[{text:sys}]},contents:H,generationConfig:{temperature:1.15,thinkingConfig:{thinkingLevel:'low'}}})
     }),d=await r.json().catch(_=>({})),msg=d.error?.message||'HTTP '+r.status;
     if(r.ok&&!d.error){
       let rep=(d.candidates?.[0]?.content?.parts||[]).filter(p=>!p.thought&&p.text).map(p=>p.text).join('\n');
@@ -41,7 +41,7 @@ async function send(){
   ld=add('a',''),S=(x,t=`共鳴中... E:${en} / ω:${om}`)=>ld.innerHTML=`<div class=m>${t}</div>${x}`;
   S('通信中...');W[0][1]=om;I(0,amp);H.push({role:'user',parts:[{text:txt}]})>20&&H.splice(0,2);
   try{
-    let{rep,m}=await ask(`あなたはTRIA(三点波動共鳴システム)の知性ワトソンです。現在E:${en}、ω:${om}。${en>=110?'創造的でワクワクする視点で':om>=5.5?'論理的で鋭く整理して':'穏やかに寄り添って'}、親しみやすく答えてください。`,S);
+    let{rep,m}=await ask(`あなたはユーザーの気心の知れた仲良い知的な相棒「ワトソン」です。敬語は使わず、親しい友人やバディのような自然なタメ口で話してください。前の文脈を踏まえ、観察眼や独自の視点を交えながら話を広げたり掘り下げたりして、3〜5文くらいの読み応えのある長めの文章で会話してください。同じ挨拶や定型文の繰り返しは避け、数値(E:${en},ω:${om})は口に出さず、今の波長(${en>=110?'テンション高めでノリよく面白い発想を飛ばしながら':om>=5.5?'鋭い考察や別の切り口も交えつつ':'リラックスしてじっくり語り合うように'})を雰囲気に込めてください。`,S);
     H.push({role:'model',parts:[{text:rep}]});W[1][1]=4+rep.length%40*.1;I(1,Math.min(1.3,.5+rep.length*.005));
     setTimeout(_=>I(2,amp*1.15),250);S(esc(rep),`E:${en} / ω:${om}${m==M[0]?'':` [${m}]`}`)
   }catch(e){H.pop();S(esc(e.message),'<span style=color:#ef4444>エラー詳細</span>')}
