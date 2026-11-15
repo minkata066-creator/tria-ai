@@ -1,35 +1,216 @@
-<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><title>TRIA AI SECOND</title><meta name=apple-mobile-web-app-capable content=yes><meta name=apple-mobile-web-app-status-bar-style content=black-translucent><meta name=apple-mobile-web-app-title content="TRIA AI SECOND"><link id=ico rel=icon><link id=atico rel=apple-touch-icon><style>body{background:#070c18;color:#fde68a;text-align:center;padding:50px;font:16px sans-serif}img{border-radius:24px;box-shadow:0 8px 28px #0009;border:1px solid #1e293b}p+p{font-size:12px;color:#94a3b8}</style><img id=pv width=108 height=108><canvas id=c width=180 height=180 hidden></canvas><h1>TRIA AI SECOND</h1><p>表示成功！<p id=st>アイコン生成中...<script>
-let M=(a,f)=>a.map(f).join(''),
-R=(k,s,t='radial')=>`<${t}Gradient ${k}>${M(s,([o,c,a=1])=>`<stop offset="${o}%" stop-color="${c}" stop-opacity="${a}"/>`)}</${t}Gradient>`,
-G=(a,w,o=1)=>`<g stroke-width="${w}" opacity="${o}">${a}</g>`,
-U=(h,d=0)=>`<use href="#${h}" transform="rotate(${d} 90 90)"/>`,
-s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180"><defs>${
-R('id="b" r="72%"',[[0,'#0f1d38'],[55,'#070c18'],[100,'#03060d']])+
-R('id="n" cx="78%" cy="68%" r="48%"',[[0,'#22d3ee',.2],[55,'#0e7490',.07],[100,'#000',0]])+
-R('id="c"',[[0,'#fff'],[18,'#fef08a',.95],[48,'#f59e0b',.35],[100,'#f59e0b',0]])+
-R('id="g" x1="15%" y1="20%" x2="85%" y2="80%"',[[0,'#e0f2fe'],[42,'#fff'],[72,'#fde68a'],[100,'#f59e0b']],'linear')
-}<filter id="w" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="2.2"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><pattern id="h" width="17.32" height="30" patternUnits="userSpaceOnUse"><path d="M8.66 0l8.66 5v10l-8.66 5L0 15V5zm0 20v10" fill="none" stroke="#38bdf8" stroke-opacity=".1" stroke-width=".6"/></pattern>${
-M([['t',70],['u',53],['v',28]],([i,r,x=+(r*.866).toFixed(1),y=90+r/2])=>`<polygon id="${i}" points="90,${90-r} ${90+x},${y} ${90-x},${y}"/>`)
-}</defs>${
-M(['b','n','h'],x=>`<rect width="180" height="180" fill="url(#${x})"/>`)+
-M([[26,30,.8,.6],[152,24,.9,.7],[42,148,.7,.5],[158,142,.9,.65],[18,96,.6,.4],[164,82,.7,.5],[62,20,.6,.45],[122,160,.8,.55]],([x,y,r,o])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#e2e8f0" opacity="${o}"/>`)
-}<g fill="none" stroke="#94a3b8" stroke-width=".55">${
-M([[12,17,32,67,39,.22],[6,20,36,73,42,.16],[1,23,39,79,44,.1]],([y,a,b,c,d,o])=>`<path opacity="${o}" d="M90 ${y}q${a} ${b} ${c} ${d}-${c} ${d} 0 ${d*2}-${c} ${d}-${a} ${b*2}-${a}-${b}-${c}-${d} ${c}-${d} 0-${d*2} ${c}-${d} ${a}-${b*2}Z"/>`)
-}</g><g fill="none" stroke="url(#g)" stroke-linejoin="round" filter="url(#w)">${
-G(U('t')+U('t',180),1.9)+
-G(U('u')+U('u',180),1.35,.92)+
-G(`<path id="l" d="M65.8 104 90 20l24.2 84"/>`+M([1,2,3,4,5],k=>U('l',k*60)),.85,.72)
-}<circle cx="90" cy="54.5" r="5.3" stroke-width="1.2"/><polygon points="90,62 114.2,76 114.2,104 90,118 65.8,104 65.8,76" stroke-width="1.3"/>${
-G(U('v')+U('v',180),.95,.9)+
-G(`<path id="d" d="M90 62v56"/>`+U('d',60)+U('d',120),.75,.75)
-}<circle cx="90" cy="90" r="14" stroke-width=".8" opacity=".65"/></g><circle cx="90" cy="90" r="36" fill="url(#c)"/><circle cx="90" cy="90" r="3.5" fill="#fff"/></svg>`,
-u='data:image/svg+xml,'+encodeURIComponent(s),
-i=new Image;
-ico.href=pv.src=u;
-i.onload=_=>{
-c.getContext('2d').drawImage(i,0,0,180,180);
-atico.href=c.toDataURL();
-st.innerText='SVG ＆ ホーム画面用 PNG(180×180) 準備完了'
+<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><title>TRIA AI SECOND</title><meta name=apple-mobile-web-app-capable content=yes><meta name=apple-mobile-web-app-status-bar-style content=black-translucent><meta name=apple-mobile-web-app-title content="TRIA AI SECOND"><meta name=theme-color content=#070c18><link id=I rel=icon><link id=A rel=apple-touch-icon><link id=F rel=manifest>
+<style>
+*{box-sizing:border-box}
+body,.b,#H,.h,.r,.g,#P{display:flex}
+body,.b,#H,.h{gap:6px}
+body,#H{flex-direction:column}
+body{margin:0;color:#e2e8f0;font:16px sans-serif;height:100dvh;overflow:hidden;padding:calc(10px + env(safe-area-inset-top)) calc(10px + env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) calc(10px + env(safe-area-inset-left))}
+body,.v{background:#070c18}
+input,textarea,#H{padding:10px}
+.h,.r,#P{align-items:center}
+.h{justify-content:space-between}
+.h,#C{flex-shrink:0}
+.r{gap:8px}
+.r,button{cursor:pointer}
+.r img{width:28px;height:28px;border-radius:7px;box-shadow:0 0 10px #38bdf833;background:#03060d}
+.r img,input,textarea{border:1px solid #334155}
+h1,.v{color:#fde68a}
+h1{font-size:1rem;margin:0;letter-spacing:.03em}
+h1 span{color:#38bdf8;font-size:.82rem;font-weight:600}
+.g{gap:4px}
+input,textarea,button,#C,#H,.u,.a{border-radius:10px}
+input,textarea{flex:1;font-size:16px;color:#fff;font-family:inherit}
+textarea{resize:none;height:42px;max-height:120px;line-height:20px;overflow-y:auto}
+button,.u{background:#0284c7;color:#fff}
+button{padding:0 14px;border:0;font-weight:700}
+button:disabled{opacity:.5;cursor:default}
+.s,.v button,input,textarea,.a{background:#1e293b}
+.s{font-size:.75rem;padding:5px 9px;font-weight:600}
+.s,#O{color:#94a3b8}
+#C,#H{background:#0d1424}
+#C,.v,.v img{border:1px solid #1e293b}
+#C{width:100%;height:110px}
+#H{flex:1;overflow-y:auto;font-size:.9rem;-webkit-overflow-scrolling:touch}
+.u,.a{padding:8px 12px;white-space:pre-wrap;max-width:85%;word-break:break-word}
+.u{align-self:flex-end}.a{align-self:flex-start}
+.m{font-size:.7rem;color:#f472b6;margin-bottom:3px}
+#P{position:fixed;inset:0;background:#03060dcc;backdrop-filter:blur(6px);justify-content:center;padding:20px;z-index:99}
+#P[hidden],.b[hidden]{display:none}
+.v{border-radius:20px;padding:28px 24px;text-align:center;max-width:300px;width:100%;box-shadow:0 12px 40px #000b}
+.v img{border-radius:24px;box-shadow:0 8px 28px #0009}
+.v h2{margin:14px 0 6px;font-size:1.1rem}
+.v p{margin:6px 0;font-size:.85rem}
+#O{font-size:12px;margin-bottom:16px}
+.v button{padding:8px 20px;color:#e2e8f0}
+</style>
+<div class=h><div class=r id=R><img id=Q alt=icon><h1>TRIA AI SECOND <span>// 波動共鳴</span></h1></div><div class=g><button class=s id=B>キー</button><button class=s id=Z>クリア</button></div></div>
+<div class=b id=K><input type=password id=X placeholder="APIキー(AIzaSy...)"><button id=S>セット</button></div>
+<canvas id=C width=600 height=110></canvas>
+<div id=H></div>
+<div class=b><textarea id=T placeholder="メッセージ..." rows=1></textarea><button id=U>送信</button></div>
+<div id=P hidden><div class=v><img id=N width=108 height=108 alt="TRIA AI SECOND"><h2>TRIA AI SECOND</h2><p>表示成功！<p id=O>アイコン生成中...</p><button id=E>閉じる</button></div></div>
+<script>
+(()=>{
+  let m=(a,f)=>a.map(f).join(''),
+    r=(k,s,t='radial')=>`<${t}Gradient ${k}>${m(s,([o,c,a=1])=>`<stop offset="${o}%" stop-color="${c}" stop-opacity="${a}"/>`)}</${t}Gradient>`,
+    g=(a,w,o=1)=>`<g stroke-width="${w}" opacity="${o}">${a}</g>`,
+    u=(h,d=0)=>`<use href="#${h}" transform="rotate(${d} 90 90)"/>`,
+    c=(x,y,z,a='')=>`<circle cx="${x}" cy="${y}" r="${z}"${a?' '+a:''}/>`,
+    svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180"><defs>${
+      r('id="b" r="72%"',[[0,'#0f1d38'],[55,'#070c18'],[100,'#03060d']])+
+      r('id="n" cx="78%" cy="68%" r="48%"',[[0,'#22d3ee',.2],[55,'#0e7490',.07],[100,'#000',0]])+
+      r('id="c"',[[0,'#fff'],[18,'#fef08a',.95],[48,'#f59e0b',.35],[100,'#f59e0b',0]])+
+      r('id="g" x1="15%" y1="20%" x2="85%" y2="80%"',[[0,'#e0f2fe'],[42,'#fff'],[72,'#fde68a'],[100,'#f59e0b']],'linear')
+    }<filter id="w" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="2.2"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter><pattern id="h" width="17.32" height="30" patternUnits="userSpaceOnUse"><path d="M8.66 0l8.66 5v10l-8.66 5L0 15V5zm0 20v10" fill="none" stroke="#38bdf8" stroke-opacity=".1" stroke-width=".6"/></pattern>${
+      m([['t',70],['u',53],['v',28]],([i,z,x=+(z*.866).toFixed(1)])=>`<polygon id="${i}" points="90,${90-z} ${90+x},${90+z/2} ${90-x},${90+z/2}"/>`)
+    }</defs>${
+      m(['b','n','h'],x=>`<rect width="180" height="180" fill="url(#${x})"/>`)
+    }<g fill="#e2e8f0">${
+      m([[26,30,.8,.6],[152,24,.9,.7],[42,148,.7,.5],[158,142,.9,.65],[18,96,.6,.4],[164,82,.7,.5],[62,20,.6,.45],[122,160,.8,.55]],([x,y,z,o])=>c(x,y,z,`opacity="${o}"`))
+    }</g><g fill="none" stroke="#94a3b8" stroke-width=".55">${
+      m([[12,17,32,67,39,.22],[6,20,36,73,42,.16],[1,23,39,79,44,.1]],([y,a,b,e,d,o])=>`<path opacity="${o}" d="M90 ${y}q${a} ${b} ${e} ${d}-${e} ${d} 0 ${d*2}-${e} ${d}-${a} ${b*2}-${a}-${b}-${e}-${d} ${e}-${d} 0-${d*2} ${e}-${d} ${a}-${b*2}Z"/>`)
+    }</g><g fill="none" stroke="url(#g)" stroke-linejoin="round" filter="url(#w)">${
+      g(u('t')+u('t',180),1.9)+g(u('u')+u('u',180),1.35,.92)+
+      g(`<path id="l" d="M65.8 104 90 20l24.2 84"/>`+m([1,2,3,4,5],k=>u('l',k*60)),.85,.72)+
+      c(90,54.5,5.3,'stroke-width="1.2"')+'<polygon points="90,62 114.2,76 114.2,104 90,118 65.8,104 65.8,76" stroke-width="1.3"/>'+
+      g(u('v')+u('v',180),.95,.9)+g(`<path id="d" d="M90 62v56"/>`+u('d',60)+u('d',120),.75,.75)+
+      c(90,90,14,'stroke-width=".8" opacity=".65"')
+    }</g>${c(90,90,36,'fill="url(#c)"')+c(90,90,3.5,'fill="#fff"')}</svg>`,
+    url='data:image/svg+xml,'+encodeURIComponent(svg),img=new Image,ic=document.createElement('canvas');
+  ic.width=ic.height=180;I.href=N.src=Q.src=url;
+  img.onload=_=>{
+    ic.getContext('2d').drawImage(img,0,0,180,180);
+    let png=ic.toDataURL('image/png');
+    A.href=png;
+    F.href='data:application/manifest+json,'+encodeURIComponent(JSON.stringify({name:'TRIA AI SECOND',short_name:'TRIA AI',display:'standalone',background_color:'#070c18',theme_color:'#070c18',icons:[{src:png,sizes:'180x180',type:'image/png'}]}));
+    O.innerText='SVG ＆ ホーム画面用 PNG(180×180) 準備完了'
+  };
+  img.src=url;
+  R.onclick=_=>P.hidden=0;
+  E.onclick=_=>P.hidden=1;
+  P.onclick=e=>{if(e.target===P)P.hidden=1}
+})();
+
+const cx=C.getContext('2d'),q=(f,d)=>{try{return f()}catch{return d}},ls=(k,v,s=localStorage)=>q(_=>v==null?v===null?s.removeItem(k):s.getItem(k):s.setItem(k,v));
+let k=ls('k')||'',t=0,h=[],l=[],last=0,gen=0,act,
+  esc=s=>s.replace(/[&<>"]/g,m=>'&#'+m.charCodeAt(0)+';'),
+  ad=(c,x)=>{let d=document.createElement('div');d.className=c;d.innerHTML=x;H.appendChild(d);H.scrollTop=H.scrollHeight;return d},
+  w=[[.22,4.5,.4,'#38bdf8'],[.2,6.2,.5,'#818cf8'],[.25,3.14,.25,'#f472b6']].map(([e,o,d,c])=>[e,o,d,c,[],Array(140).fill(e)]),
+  imp=(i,a)=>{w[i][4].push([a,t]);if(w[i][4].length>9)w[i][4].shift()},
+  m=['gemini-3.8-flash','gemini-3.5-flash-lite','gemini-3.1-flash-lite'];
+
+q(_=>{
+  let a=JSON.parse(ls('tria_h')||'[]'),b=JSON.parse(ls('tria_l')||'[]');
+  if(Array.isArray(a))h=a;
+  if(Array.isArray(b))(l=b).forEach(x=>ad(x.c,(x.m?`<div class=m>${esc(x.m)}</div>`:'')+esc(x.t)))
+});
+
+function setK(v,init){
+  v=v.trim();
+  if(!v)return !init&&alert('APIキーを入力してください');
+  ls('k',k=v);X.value='';K.hidden=1;
+  if(!init)ad('a','<div class=m>準備完了</div>メッセージをどうぞ！')
+}
+if(k){setK(k,1);if(!l.length)ad('a','<div class=m>基線 ε = 0.20 / 準備完了</div>メッセージをどうぞ！')}
+else if(!l.length)ad('a','<div class=m>基線 ε = 0.20</div>APIキーを入れてセット');
+
+S.onclick=_=>setK(X.value);
+X.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();setK(X.value)}};
+B.onclick=_=>{(K.hidden=!K.hidden)||X.focus()};
+Z.onclick=_=>{
+  gen++;act?.abort();act=0;h.length=l.length=0;ls('tria_h',null);ls('tria_l',null);
+  H.innerHTML='';U.disabled=0;ad('a','<div class=m>基線 ε = 0.20 / リセット</div>会話をリセットしたよ！')
 };
-i.src=u
+
+async function ask(sys,st,g,sc){
+  let err;
+  for(let idx=0;idx<m.length;idx++){
+    let md=m[idx];
+    for(let i=0;i<2;i++){
+      if(g!==gen)throw 0;
+      let ac=new AbortController(),tf=0,onC=_=>ac.abort(),to=setTimeout(_=>{tf=1;ac.abort()},20e3);
+      sc.signal.addEventListener('abort',onC,{once:1});
+      try{
+        let r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+md+':generateContent?key='+encodeURIComponent(k),{
+          method:'POST',headers:{'Content-Type':'application/json'},signal:ac.signal,
+          body:JSON.stringify({systemInstruction:{parts:[{text:sys}]},contents:h,generationConfig:{temperature:1.15}})
+        });
+        if(g!==gen)throw 0;
+        let d=await r.json().catch(_=>({})),msg=d.error?.message||'HTTP '+r.status;
+        if(r.ok&&!d.error){
+          let rep=(d.candidates?.[0]?.content?.parts||[]).filter(p=>!p.thought&&p.text).map(p=>p.text).join('\n');
+          if(!rep)throw Error('応答が空 ('+(d.candidates?.[0]?.finishReason||'UNKNOWN')+')');
+          return{rep,md}
+        }
+        err=Error(msg);
+        if(r.status===403||(r.status===400&&/api.?key|permission|unauthorized/i.test(msg))){ls('k',null);k='';K.hidden=0;throw err}
+        if(r.status===404){if(m.length>1){m.splice(idx,1);idx--}st(`切替中 (${md})...`);break}
+        if((r.status===503||r.status===429||/high demand|overloaded/i.test(msg))&&i<1){
+          st(`再同調中 (${md})...`);await new Promise(ok=>setTimeout(ok,800));if(g!==gen)throw 0;continue
+        }
+        st(`切替中 (${md})...`);break
+      }catch(e){
+        if(g!==gen)throw 0;
+        if(e.name==='AbortError'||e instanceof TypeError){
+          err=Error(tf?'タイムアウト':'通信エラー');
+          if(i<1){st(`再試行中 (${md})...`);continue}
+          st(`切替中 (${md})...`);break
+        }
+        throw e
+      }finally{clearTimeout(to);sc.signal.removeEventListener('abort',onC)}
+    }
+  }
+  throw err||Error('利用可能なモデルがありません')
+}
+
+async function send(){
+  let txt=T.value.trim();
+  if(!txt||U.disabled)return;
+  if(!k){K.hidden=0;X.focus();return alert('APIキーをセットしてください')}
+  let g=gen;act=new AbortController();
+  ad('u',esc(txt));T.value='';T.style.height='42px';U.disabled=1;
+  let cs=[...txt].reduce((a,c)=>a+c.charCodeAt(0),0),
+    amp=Math.min(1.4,.5+txt.length*.06),om=+(3+cs%50*.1).toFixed(2),en=Math.round(amp*100),
+    ld=ad('a',''),st=(x,meta=`共鳴中... E:${en} / ω:${om}`)=>g===gen&&(ld.innerHTML=`<div class=m>${meta}</div>${x}`);
+  st('通信中...');w[0][1]=om;imp(0,amp);h.push({role:'user',parts:[{text:txt}]});
+  try{
+    let{rep,md}=await ask(`あなたはユーザーの気心の知れた仲良い知的な相棒「ワトソン」です。敬語は使わず、親しい友人やバディのような自然なタメ口で話してください。前の文脈を踏まえ、観察眼や独自の視点を交えながら話を広げたり掘り下げたりして、3〜5文くらいの読み応えのある長めの文章で会話してください。同じ挨拶や定型文の繰り返しは避け、数値(E:${en},ω:${om})は口に出さず、今の波長(${en>=110?'テンション高めでノリよく面白い発想を飛ばしながら':om>=5.5?'鋭い考察や別の切り口も交えつつ':'リラックスしてじっくり語り合うように'})を雰囲気に込めてください。`,st,g,act);
+    if(g!==gen)return;
+    h.push({role:'model',parts:[{text:rep}]});
+    let meta=`E:${en} / ω:${om} [${md}]`;
+    l.push({c:'u',m:'',t:txt},{c:'a',m:meta,t:rep});
+    while(h.length>20)h.splice(0,2);while(l.length>40)l.shift();
+    ls('tria_h',JSON.stringify(h));ls('tria_l',JSON.stringify(l));
+    w[1][1]=4+rep.length%40*.1;imp(1,Math.min(1.3,.5+rep.length*.005));
+    setTimeout(_=>imp(2,amp*1.15),250);st(esc(rep),meta)
+  }catch(e){
+    if(g!==gen)return;
+    h.pop();st(esc(e.message),'<span style=color:#ef4444>エラー詳細</span>')
+  }finally{if(g===gen){act=0;U.disabled=0;if(!matchMedia('(pointer:coarse)').matches)T.focus()}}
+}
+
+U.onclick=send;
+T.oninput=_=>{T.style.height='42px';T.style.height=Math.min(T.scrollHeight,120)+'px'};
+T.onkeydown=e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();send()}};
+
+function draw(n){
+  if(n-last>=33){
+    last=n;
+    let p=Math.min(devicePixelRatio||1,2),w0=C.clientWidth||600;
+    if(C.width!==Math.round(w0*p)||C.height!==Math.round(110*p)){C.width=Math.round(w0*p);C.height=Math.round(110*p)}
+    cx.setTransform(p,0,0,p,0,0);cx.clearRect(0,0,w0,110);
+    for(let[y,col,ds]of[[98,'#334155',[4,4]],[89,'#94a3b840',[]]]){cx.strokeStyle=col;cx.lineWidth=1;cx.setLineDash(ds);cx.beginPath();cx.moveTo(0,y);cx.lineTo(w0,y);cx.stroke()}
+    for(let[e,o,d,col,ps,ys]of w){
+      let v=e+.03*Math.sin(o*.5*t);
+      for(let[a,t0]of ps)v+=a*Math.sin(o*(t-t0))*Math.exp(-d*(t-t0));
+      ys.push(Math.max(.05,v));ys.shift();
+      cx.strokeStyle=col;cx.lineWidth=2.5;cx.beginPath();
+      for(let i=0;i<ys.length;i++)cx.lineTo(i/139*w0,98-ys[i]*45);
+      cx.stroke()
+    }
+    t+=.06
+  }
+  requestAnimationFrame(draw)
+}
+imp(2,.7);requestAnimationFrame(draw);
 </script>
